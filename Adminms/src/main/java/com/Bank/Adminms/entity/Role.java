@@ -5,8 +5,8 @@ import lombok.*;
 
 
 @Entity
-@Setter
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "role")
 public class Role {
 

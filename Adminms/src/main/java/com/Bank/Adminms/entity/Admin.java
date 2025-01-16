@@ -26,6 +26,7 @@ public class Admin {
     private Long number;
     @NotNull(message = "Identity Proof cannot be null")
     private String identityProof;
+    @ManyToOne(cascade = CascadeType.ALL)
     private Role roles;
 
     public Long getId() {
