@@ -1,34 +1,34 @@
 package com.Bank.Adminms.service;
 
+import com.Bank.Adminms.clients.AccountClient;
+import com.Bank.Adminms.clients.UserClient;
 import com.Bank.Adminms.dto.AdminDto;
-import com.Bank.Adminms.entity.Admin;
-import com.Bank.Adminms.entity.Role;
-import com.Bank.Adminms.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 @Service
 public class AdminService {
 
     @Autowired
-    private AdminRepository adminRepository;
+    private UserClient userClient;
 
-    public void registerAdmin(AdminDto adminDto){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encodedPassword = encoder.encode(adminDto.getPassword());
-        Role role = new Role();
-        role.setRoleName("ROLE_ADMIN");
-        Admin saveAdmin = new Admin();
-        saveAdmin.setName(adminDto.getName());
-        saveAdmin.setPassword(encodedPassword);
-        saveAdmin.setUsername(adminDto.getUsername());
-        saveAdmin.setIdentityProof(adminDto.getIdentityProof());
-        saveAdmin.setNumber(adminDto.getNumber());
-        saveAdmin.setRoles(role);
-        saveAdmin.setAddress(adminDto.getAddress());
-        adminRepository.save(saveAdmin);
+    @Autowired
+    private AccountClient accountClient;
+
+    public String registerAdmin(AdminDto adminDto) {
+        return userClient.registerAdmin(adminDto);
     }
 
+    public String deleteUser(Long userId) {
+        return userClient.deleteUserById(userId);
+    }
 
+    public String deactivateUserAccount(Long userId, Long accountId) {
+        return accountClient.deactivateAccountById(userId,accountId);
+    }
+    public String activateUserAccount(Long userId, Long accountId){
+        return accountClient.activateAccountById(accountId,userId);
+    }
 }

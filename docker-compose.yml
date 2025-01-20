@@ -1,0 +1,38 @@
+services:
+  postgres:
+    container_name: db1
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - my_network
+  pgadmin:
+    container_name: db_portal1
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - my_network
+  zipkin:
+    container_name: tracer
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - my_network
+networks:
+  my_network:
+    driver: bridge
+volumes:
+  pgadmin:
+  postgres:

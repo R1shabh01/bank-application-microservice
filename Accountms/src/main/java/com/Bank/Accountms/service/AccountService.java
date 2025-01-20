@@ -100,10 +100,9 @@ public class AccountService {
         return 10000000 + random.nextLong(90000000);
     }
 
-//    public List<Account> getAllAccountById(Long userId) {
-//       User fetchedUser = userRepository.findById(userId).get();
-//        return fetchedUser.getAccountList();
-//    }
+    public List<Account> getAllAccountByUserId(Long userId) {
+       return accountRepository.findByUserId(userId);
+    }
 
     public double getBalanceAmount(Long accountNumber) {
         Account account = accountRepository.findByAccountNumber(accountNumber).get();
@@ -148,5 +147,41 @@ public class AccountService {
 //        if(kycDto.getNumber()!=null) fetechedUser.setNumber(kycDto.getNumber());
 //        if(!kycDto.getIdentityProof().isEmpty()) fetechedUser.setIdentityProof(kycDto.getIdentityProof());
 //        userRepository.save(fetechedUser);
+    }
+
+    public String deleteAccountByUserId(Long accountNumber, Long userId) {
+       accountRepository.deleteAccountByUserId(accountNumber,userId);
+       return "successfully deactivated";
+
+    }
+
+    public String activateAccountById(Long accountNumber, Long userId) {
+        if(accountRepository.existsByUserId(userId) && accountRepository.existsById(accountNumber)){
+            Account account = accountRepository.findAccountByUserId(accountNumber,userId);
+            if(account.getStatus().equals("INACTIVE")){
+                System.out.println("1 Account Found");
+                account.setStatus("ACTIVE");
+                accountRepository.save(account);
+                return "Activated Account for User with id: "+userId;
+            }
+        }
+        return "ERROR";
+    }
+
+    public List<Account> getAllActiveAccountList() {
+        return accountRepository.findAllActiveAccounts();
+    }
+
+    public List<Account> getAllInActiveAccountList() {
+        return accountRepository.findAllInActiveAccounts();
+    }
+
+
+    public List<Account> byAccType(AccountType accType) {
+        return accountRepository.findAllByAccountType(accType);
+    }
+
+    public List<Account> byBranchType(BranchType branchType) {
+        return accountRepository.findAllByBranch(branchType);
     }
 }

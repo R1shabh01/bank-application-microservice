@@ -5,6 +5,8 @@ import com.Bank.Accountms.dto.AccountDto;
 import com.Bank.Accountms.dto.KycDto;
 import com.Bank.Accountms.dto.NomineeDto;
 import com.Bank.Accountms.entity.Account;
+import com.Bank.Accountms.entity.AccountType;
+import com.Bank.Accountms.entity.BranchType;
 import com.Bank.Accountms.entity.Nominee;
 import com.Bank.Accountms.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +28,12 @@ public class UserAccountController {
         accountService.createAccount(accountDto,userId);
     }
 
-//    @GetMapping("/all/{userId}")
-//    @PreAuthorize("hasRole('CUSTOMER')")
-//    public List<Account> getAllAccountByUserId(@PathVariable Long userId)
-//    {
-//        return accountService.getAllAccountById(userId);
-//    }
+    @GetMapping("/all/{userId}")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public List<Account> getAllAccountByUserId(@PathVariable Long userId)
+    {
+        return accountService.getAllAccountByUserId(userId);
+    }
 
     @GetMapping("/balance")
     @PreAuthorize("hasRole('CUSTOMER')")
@@ -75,5 +77,36 @@ public class UserAccountController {
         return accountService.getAccountDetail(accountNumber);
     }
 
+    @DeleteMapping("/deactivate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String deactivateAccountById(@RequestParam Long accountNumber,@RequestParam Long userId)
+    {
+       return accountService.deleteAccountByUserId(accountNumber , userId);
+    }
 
+    @PostMapping("/activate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String activateAccountById(@RequestParam Long accountNumber,@RequestParam Long userId){
+        return accountService.activateAccountById(accountNumber,userId);
+    }
+    @PostMapping("/active")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Account> getAllActiveAccounts() {
+         return accountService.getAllActiveAccountList();
+    }
+    @PostMapping("/inactive")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Account> getAllInactiveAccounts() {
+        return accountService.getAllInActiveAccountList();
+    }
+    @PostMapping("/by-account-type")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Account> getAccountsByAccountType(@RequestParam AccountType accountType) {
+        return accountService.byAccType(accountType);
+    }
+    @PostMapping("/by-branch-type")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Account> getAccountsByBranchType(@RequestParam BranchType branchType) {
+        return accountService.byBranchType(branchType);
+    }
 }

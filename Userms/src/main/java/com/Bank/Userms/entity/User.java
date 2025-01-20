@@ -1,4 +1,4 @@
-package com.Bank.Adminms.entity;
+package com.Bank.Userms.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +9,8 @@ import java.util.List;
 
 @Entity
 @Data
-public class Admin {
+@Table(name = "users")
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +27,13 @@ public class Admin {
     private Long number;
     @NotNull(message = "Identity Proof cannot be null")
     private String identityProof;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Role roles;
+
+    private List<Long> accountids = new ArrayList<>();
+
+    private List<Long> investmentids = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -92,4 +98,52 @@ public class Admin {
     public void setRoles(Role roles) {
         this.roles = roles;
     }
+
+    public List<Long> getAccountids() {
+        return accountids;
+    }
+
+    public void setAccountids(List<Long> accountids) {
+        this.accountids = accountids;
+    }
+
+    public List<Long> getInvestmentids() {
+        return investmentids;
+    }
+
+    public void setInvestmentids(List<Long> investmentids) {
+        this.investmentids = investmentids;
+    }
+
+    //    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//        authorities.add(new SimpleGrantedAuthority(this.roles.getRoleName()));
+//        return authorities;
+//    }
+
+//    @Override
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 }
